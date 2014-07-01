@@ -1,4 +1,4 @@
-# websharper.webspeech [![Build status]()](https://ci.appveyor.com/project/Jand42/websharper-webspeech)
+# websharper.webspeech [![Build status](https://ci.appveyor.com/api/projects/status/b5u6xx6nj8qehl43)](https://ci.appveyor.com/project/Jand42/websharper-webspeech)
 
 [Samples][samp] for [WebSharper][ws] bindings for the Speech API.
 
