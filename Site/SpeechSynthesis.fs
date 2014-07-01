@@ -37,6 +37,8 @@ module SpeechSynthesis =
                 |> Array.iter (fun e ->
                                     pre.Text <- pre.Text + e.Transcript                             
                               )
+                let height = pre.Dom?scrollHeight
+                pre.Dom?scrollTop <- height
 
         let startBtn = Button [ Text "Start" ]
                         |>! OnClick (fun _ _ -> srecog.Start())
