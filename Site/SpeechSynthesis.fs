@@ -21,9 +21,9 @@ module SpeechSynthesis =
 
     let Main (e : Dom.Element) =
 
-        let info = Div [ Text "Speak loud and clearly." ]
+        let info = Div [ Text "Speak loud and clear." ]
         let pre = Pre [ Attr.Style "width: 550px; height: 300px; overflow-y: scroll; display: block;" ]
-        
+
         let srecog = new SpeechRecognition ()
         JavaScript.Log srecog.Grammars
         srecog.Lang <- "en-US"
@@ -54,4 +54,4 @@ module SpeechSynthesis =
             .FileName(__SOURCE_FILE__)
             .Keywords(["user media"; "speech synthesis"; "speech"; "speech-to-text"])
             .Render(Main)
-            .Create()       
+            .Create()
