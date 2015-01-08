@@ -1,8 +1,8 @@
 ﻿namespace Site
 
 open IntelliFactory.WebSharper
-open IntelliFactory.WebSharper.Html
-open IntelliFactory.WebSharper.Html5
+open IntelliFactory.WebSharper.JavaScript
+open IntelliFactory.WebSharper.Html.Client
 open IntelliFactory.WebSharper.JQuery
 
 [<JavaScript>]
@@ -24,11 +24,10 @@ module SpeechUtterance =
                         let t = TextArea [ Attr.Width "200"; Text text ]
                         let b = Button [ Text "Speak!" ]
                                 |>! OnClick (fun _ _ ->                                                     
-                                                u.Text <- t.Value
-                                                u.Lang <- lang
+                                    u.Text <- t.Value
+                                    u.Lang <- lang
 
-                                                sp.Speak(u)
-                                            )
+                                    sp.Speak(u))
 
                         let style =
                             "margin: 5px; display: inline-block;"

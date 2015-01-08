@@ -1,8 +1,8 @@
 ﻿namespace Site
 
 open IntelliFactory.WebSharper
-open IntelliFactory.WebSharper.Html
-open IntelliFactory.WebSharper.Html5
+open IntelliFactory.WebSharper.JavaScript
+open IntelliFactory.WebSharper.Html.Client
 open IntelliFactory.WebSharper.JQuery
 
 [<JavaScript>]
@@ -25,7 +25,6 @@ module SpeechSynthesis =
         let pre = Pre [ Attr.Style "width: 550px; height: 300px; overflow-y: scroll; display: block;" ]
 
         let srecog = new SpeechRecognition ()
-        JavaScript.Log srecog.Grammars
         srecog.Lang <- "en-US"
         srecog.Continuous <- true
         srecog.Onresult <-
