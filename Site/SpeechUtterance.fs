@@ -2,8 +2,11 @@
 
 open WebSharper
 open WebSharper.JavaScript
-open WebSharper.Html.Client
 open WebSharper.JQuery
+open WebSharper.UI
+open WebSharper.UI.Notation
+open WebSharper.UI.Html
+open WebSharper.UI.Client
 
 [<JavaScript>]
 module SpeechUtterance =
@@ -19,26 +22,23 @@ module SpeechUtterance =
 
     let MkField (sp : SpeechSynthesis) (u : SpeechSynthesisUtterance) =
         Texts
-        |> List.map (fun elem ->
-                        let text, lang = elem
-                        let t = TextArea [ Attr.Width "200"; Text text ]
-                        let b = Button [ Text "Speak!" ]
-                                |>! OnClick (fun _ _ ->                                                     
-                                    u.Text <- t.Value
-                                    u.Lang <- lang
-
-                                    sp.Speak(u))
-
-                        let style =
-                            "margin: 5px; display: inline-block;"
-
-                        Div [ Attr.Style style ] -< [ t; Tags.Br []; b ]
-                    )
+        |> List.map (fun (txt, lang) ->
+            let txt = Var.Create txt
+            let t = Doc.InputArea [attr.width "200"] txt
+            let b =
+                button [
+                    on.click (fun _ _ ->
+                        u.Text <- !txt
+                        u.Lang <- lang
+                        sp.Speak(u))
+                ] [text "Speak!"]
+            let style = "margin: 5px; display: inline-block;"
+            div [attr.style style] [t; br [] []; b]
+        )
 
     let Main (e : Dom.Element) =
-        let m = Div <| MkField (Window.SpeechSynthesis) (new SpeechSynthesisUtterance())
-
-        JQuery.Of(e).Append(m.Dom).Ignore
+        div [] <| MkField (Window.SpeechSynthesis) (new SpeechSynthesisUtterance())
+        |> Doc.Run e
 
     let Sample = 
         Samples.Build()

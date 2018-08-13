@@ -2,8 +2,11 @@
 
 open WebSharper
 open WebSharper.JavaScript
-open WebSharper.Html.Client
 open WebSharper.JQuery
+open WebSharper.UI
+open WebSharper.UI.Notation
+open WebSharper.UI.Html
+open WebSharper.UI.Client
 
 [<JavaScript>]
 module SpeechSynthesis =
@@ -20,32 +23,27 @@ module SpeechSynthesis =
     let MaxConfidence = Array.maxBy (fun (e : SpeechRecognitionAlternative) -> e.Confidence)
 
     let Main (e : Dom.Element) =
+        let txt = Var.Create ""
+        let info = div [] [text "Speak loud and clear."]
+        let pre = Elt.pre [attr.style "width: 550px; height: 300px; overflow-y: scroll; display: block;"] [text txt.V]
 
-        let info = Div [ Text "Speak loud and clear." ]
-        let pre = Pre [ Attr.Style "width: 550px; height: 300px; overflow-y: scroll; display: block;" ]
+        let srecog =
+            SpeechRecognition(
+                Lang = "en-US",
+                Continuous = true,
+                Onresult = fun res ->
+                    (res.Results
+                    |> Utils.ToArray).[res.ResultIndex ..]
+                    |> Array.map Utils.ToArray
+                    |> Array.map MaxConfidence
+                    |> Array.iter (fun e -> txt := !txt + e.Transcript)
+                    pre.Dom.ScrollTop <- pre.Dom.ScrollHeight
+            )
 
-        let srecog = new SpeechRecognition ()
-        srecog.Lang <- "en-US"
-        srecog.Continuous <- true
-        srecog.Onresult <-
-            fun res ->
-                (res.Results
-                |> Utils.ToArray).[res.ResultIndex ..]
-                |> Array.map Utils.ToArray
-                |> Array.map MaxConfidence
-                |> Array.iter (fun e ->
-                                    pre.Text <- pre.Text + e.Transcript                             
-                              )
-                let height = pre.Dom?scrollHeight
-                pre.Dom?scrollTop <- height
-
-        let startBtn = Button [ Text "Start" ]
-                        |>! OnClick (fun _ _ -> srecog.Start())
-        let stopBtn = Button [ Text "Stop" ]
-                        |>! OnClick (fun _ _ -> srecog.Stop())
-        let m = Div [ info; pre; startBtn; stopBtn ]
-
-        JQuery.Of(e).Append(m.Dom).Ignore
+        let startBtn = button [on.click (fun _ _ -> srecog.Start())] [text "Start"]
+        let stopBtn = button [on.click (fun _ _ -> srecog.Stop())] [text "Stop"]
+        div [] [info; pre; startBtn; stopBtn]
+        |> Doc.Run e
 
     let Sample = 
         Samples.Build()
