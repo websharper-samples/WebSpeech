@@ -12,4 +12,6 @@ module Client =
             !+ SpeechSynthesis.Sample
         ]
 
-    let Main = All.Show()
+    [<SPAEntryPoint>]
+    let Main() =
+        All.Show()
