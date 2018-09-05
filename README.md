@@ -5,5 +5,5 @@
 
 Please note that these features are only supported in Chrome as of now.
 
-[samp]: http://intellifactory.github.io/websharper.webspeech.samples
+[samp]: http://websharper-samples.github.io/WebSpeech
 [ws]: http://websharper.com/
